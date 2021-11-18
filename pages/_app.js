@@ -13,29 +13,38 @@ export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
     if (localStorage.getItem("login")) {
       setAcces(true);
-    } else {
-      router.push("/");
     }
-  }, [router]);
+  }, []);
+
+  const Logout = async () => {
+    await localStorage.removeItem("login");
+    router.push("/");
+  };
+
   return (
     <>
-      {acces && (
-        <>
-          <nav>
-            <ul>
-              <li>
-                <Link href="/"># Home!</Link>
-              </li>
-              <li>
-                <Link href="/create"># Create Post</Link>
-              </li>
-              <li>
-                <Link href="/postlist"># Post List</Link>
-              </li>
-            </ul>
-          </nav>
-        </>
-      )}
+      <>
+        <nav>
+          <ul>
+            <li>
+              <Link href="/"># Home!</Link>
+            </li>
+            <li>
+              <Link href="/create"># Create Post</Link>
+            </li>
+            <li>
+              <Link href="/postlist"># Post List</Link>
+            </li>
+          </ul>
+        </nav>
+
+        {acces && (
+          <button className="btn btn-danger m-2" onClick={() => Logout()}>
+            Logout
+          </button>
+        )}
+      </>
+
       <Component {...pageProps} />
       {!acces && <Form />}
     </>

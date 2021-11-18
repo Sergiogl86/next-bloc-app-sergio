@@ -63,11 +63,13 @@ const Form = () => {
                 onChange={changeData}
               />
             </div>
-            {login.avatar && (
+            {login.userAvatar && (
               <img
                 src={login.userAvatar}
                 className="img-thumbnail"
                 alt={`image-${login.userName}`}
+                width="150"
+                height="150"
               />
             )}
             <div className="form-group mt-3">
