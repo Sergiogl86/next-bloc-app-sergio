@@ -4,13 +4,31 @@ import Link from "next/link";
 
 const Postlist = () => {
   const [list, setList] = useState([]);
+  const [user, setUser] = useState({
+    userId: "",
+    userName: "",
+    userAvatar: "",
+  });
 
   const postUrl = "https://isdi-blog-posts-api.herokuapp.com/posts/";
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("login")));
+  }, []);
 
   const getpostAPI = async () => {
     try {
       const { data: listposts } = await axios.get(postUrl);
       setList(listposts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deletePostAPI = async (deleteId) => {
+    try {
+      await axios.delete(`${postUrl}${deleteId}`);
+      setList(list.filter((post) => post.id !== deleteId));
     } catch (error) {
       console.log(error);
     }
@@ -40,6 +58,20 @@ const Postlist = () => {
                   height="150"
                 />
               </div>
+
+              {user.userId === post.userId ? (
+                <>
+                  <button
+                    className="btn btn-danger m-2"
+                    key={post.id}
+                    onClick={() => deletePostAPI(post.id)}
+                  >
+                    Delete
+                  </button>
+                </>
+              ) : (
+                <></>
+              )}
               <Link href={`/postlist/${post.id}`}># More...</Link>
             </li>
           ))}

@@ -30,7 +30,7 @@ export async function getStaticPaths() {
   const postsUrl = "https://isdi-blog-posts-api.herokuapp.com/posts/";
   try {
     const { data: posts } = await axios.get(postsUrl);
-    const paths = posts.slice(0, 10).map((post) => ({
+    const paths = posts.map((post) => ({
       params: { id: `${post.id}` },
     }));
     return { paths, fallback: false };

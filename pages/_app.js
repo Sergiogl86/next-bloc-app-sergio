@@ -16,7 +16,7 @@ export default function MyApp({ Component, pageProps }) {
     } else {
       router.push("/");
     }
-  }, []);
+  }, [router]);
   return (
     <>
       {acces && (
