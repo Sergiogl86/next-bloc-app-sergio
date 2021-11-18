@@ -9,6 +9,14 @@ const morePost = ({ post }) => (
             <h2 className="list-group-item active">More...:</h2>
             <h2 className="list-group-item">{post.title}</h2>
             <p className="list-group-item">{post.body}</p>
+            <h2 className="list-group-item">{post.userName}</h2>
+            <img
+              src={post.userAvatar}
+              className="img-thumbnail"
+              alt={`image-${post.userName}`}
+              width="150"
+              height="150"
+            />
           </ul>
         </div>
       </>

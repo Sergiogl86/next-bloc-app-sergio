@@ -1,51 +1,38 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
+
 import { useRouter } from "next/router";
+import { uuid } from "uuidv4";
 
-const CreateUser = () => {
-  const [addPost, setAddPost] = useState({
-    title: "",
-    body: "",
-  });
-
-  const [user, setUser] = useState({
-    userId: "",
+const Form = () => {
+  const router = useRouter();
+  const [login, setLogin] = useState({
+    userId: uuid(),
     userName: "",
     userAvatar: "",
   });
 
-  useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("login")));
-  }, []);
-
-  const router = useRouter();
-  const postUrl = "https://isdi-blog-posts-api.herokuapp.com/posts";
-
   const changeData = (event) => {
-    setAddPost({
-      ...addPost,
+    setLogin({
+      ...login,
       [event.target.id]: event.target.value,
     });
   };
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    try {
-      await axios.post(postUrl, { ...addPost, ...user });
-      router.push("/postlist");
-      setAddPost({
-        title: "",
-        body: "",
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await localStorage.setItem("login", JSON.stringify(login));
+
+    setLogin({
+      userId: uuid(),
+      userName: "",
+      userAvatar: "",
+    });
+    router.push("/postlist");
   };
 
   return (
     <>
-      <h2>Create Post</h2>
+      <h2>Login</h2>
       <div className="container loginPage">
         <div className="row">
           <form
@@ -55,34 +42,41 @@ const CreateUser = () => {
             onSubmit={onSubmit}
           >
             <div className="form-group">
-              <label htmlFor="title">Title: </label>
+              <label htmlFor="userName">Name: </label>
               <input
                 data-testid="login-title"
                 type="text"
-                id="title"
+                id="userName"
                 className="form-control"
-                value={addPost.title}
+                value={login.userName}
                 onChange={changeData}
               />
             </div>
             <div className="form-group">
-              <label htmlFor="body">Body: </label>
+              <label htmlFor="userAvatar">Avatar: </label>
               <input
                 data-testid="login-body"
                 type="text"
-                id="body"
+                id="userAvatar"
                 className="form-control"
-                value={addPost.password}
+                value={login.userAvatar}
                 onChange={changeData}
               />
             </div>
+            {login.avatar && (
+              <img
+                src={login.userAvatar}
+                className="img-thumbnail"
+                alt={`image-${login.userName}`}
+              />
+            )}
             <div className="form-group mt-3">
               <button
                 data-testid="Post-Form"
                 type="submit"
                 className="btn btn-dark"
               >
-                Post
+                Login
               </button>
             </div>
           </form>
@@ -92,4 +86,4 @@ const CreateUser = () => {
   );
 };
 
-export default CreateUser;
+export default Form;
